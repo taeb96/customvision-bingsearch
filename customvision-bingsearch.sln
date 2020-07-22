@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "customvision-bingsearch", "customvision-bingsearch.csproj", "{7DEA814E-4E3A-4DC7-8BA9-2C0F59FE9CBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DEA814E-4E3A-4DC7-8BA9-2C0F59FE9CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DEA814E-4E3A-4DC7-8BA9-2C0F59FE9CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DEA814E-4E3A-4DC7-8BA9-2C0F59FE9CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DEA814E-4E3A-4DC7-8BA9-2C0F59FE9CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {003B4A78-3196-45B1-9076-DD621B61115C}
+	EndGlobalSection
+EndGlobal
