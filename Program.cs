@@ -82,9 +82,9 @@ namespace BingSearchApisQuickstart
                             }
                         }
                     }
+                }
 
                 // If tag does not exist, create the tag
-                }
                 if (tagFlag == false)
                 {
                     string weburi = customVisionUriBase + customVisionProjectId + "/tags/?name=" + subject.subjectName;
