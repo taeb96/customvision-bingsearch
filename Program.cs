@@ -16,12 +16,8 @@ namespace BingSearchApisQuickstart
         {
             public string subjectName { get; set; }
             public string subjectTagId { get; set; }
+            public string subjectSearchTerm { get; set; }
         }
-        // Number of images to select
-        const int count = 5;
-
-        // Offset number
-        const int offset = 10;
 
         // A struct to return image search results seperately from headers
         struct SearchResult
@@ -32,16 +28,23 @@ namespace BingSearchApisQuickstart
 
         static void Main()
         {
-
+            // Configure items in SubjectList to train models with different tags & search terms.
             List<Subject> subjectList = new List<Subject>
             {
-                new Subject{ subjectName = "Apples"},
-                new Subject{ subjectName = "Pears"}
+                new Subject{ subjectName = "Apples", subjectSearchTerm = "Granny Smith Apple"},
+                new Subject{ subjectName = "Oranges", subjectSearchTerm = "Naval Orange"}
             };
 
-            //Console.OutputEncoding = System.Text.Encoding.UTF8;
+            // Number of images to search for
+            Console.WriteLine("Enter offset value for image search: ");
+            int offset = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Enter Bing Subscription Key: ");
+            // Offset number used for paging between results 
+            Console.WriteLine("Enter count of images for each tag: ");
+            int count = int.Parse(Console.ReadLine());
+
+            // Bing Key, Custom Vision Key & Custom Vision Project ID
+            Console.WriteLine("Enter Bing Search Key: ");
             string bingSubscriptionKey = Console.ReadLine();
             Console.WriteLine("Enter Custom Vision Key: ");
             string customVisionKey = Console.ReadLine();
@@ -51,12 +54,11 @@ namespace BingSearchApisQuickstart
             foreach (var subject in subjectList)
             {
                 bool tagFlag = false;
-                Console.WriteLine($"Searching images for: {subject.subjectName}"+ "\n");
-                SearchResult result = BingImageSearch(bingSubscriptionKey, subject.subjectName);
+                Console.WriteLine($"Searching images for: {subject.subjectName} with search term of {subject.subjectSearchTerm}");
+                SearchResult result = BingImageSearch(bingSubscriptionKey, subject.subjectSearchTerm, count, offset);
 
-                //deserialize the JSON response from the Bing Image Search API
+                //deserialize JSON response from the Bing Image Search API
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(result.jsonResult);
-                Console.WriteLine(jsonObj);
 
                 // Checking if tag already exists
                 var httpWebRequestGetTags = (HttpWebRequest)WebRequest.Create(customVisionUriBase + customVisionProjectId + "/tags");
@@ -78,7 +80,6 @@ namespace BingSearchApisQuickstart
                             {
                                 tagFlag = true;
                                 subject.subjectTagId = (string)tag["id"];
-                                Console.WriteLine($"Tag already exists, setting tag flag for tag: {subject.subjectName} with tag ID: {subject.subjectTagId}");
                             }
                         }
                     }
@@ -98,8 +99,6 @@ namespace BingSearchApisQuickstart
                     {
                         var streamResult = streamReader.ReadToEnd();
                         dynamic tagJsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(streamResult);
-                        Console.WriteLine("Tag Creation Response: " + tagJsonObj);
-                        Console.WriteLine("Tag Creation ID is: " + tagJsonObj["id"]);
                         subject.subjectTagId = tagJsonObj["id"];
                     }
                 }
@@ -107,9 +106,9 @@ namespace BingSearchApisQuickstart
                 // Iterating through each of the images returned in search result and sending to Custom Vision Project with relevant tag.
                 foreach (var item in jsonObj["value"])
                 {
-                    Console.WriteLine($"Title for the first image result: { item["name"]}" + "\n");
+                    Console.WriteLine($"Image Title: { item["name"]}" + "\n");
                     //After running the application, copy the output URL into a browser to see the image. 
-                    Console.WriteLine($"URL for the first image result: {item["webSearchUrl"]}" + "\n");
+                    Console.WriteLine($"Image URL: {item["webSearchUrl"]}" + "\n");
 
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(customVisionUriBase + customVisionProjectId + "/images/urls");
                     httpWebRequest.Headers["Training-Key"] = customVisionKey;
@@ -129,13 +128,13 @@ namespace BingSearchApisQuickstart
                     }
                 }
             }
-            Console.Write("\nPress Enter to exit ");
+            Console.Write("\nImages successfully uploaded to Custom Vision project ");
             Console.ReadLine();
 
         }
 
         // Function for performing a Bing Image search and returning the results as a SearchResult object.
-        static SearchResult BingImageSearch(string bingSubscriptionKey, string searchQuery)
+        static SearchResult BingImageSearch(string bingSubscriptionKey, string searchQuery, int count, int offset)
         {
             // Construct the URI of the search request
             var uriQuery = bingUriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&offset=" + offset + "&count=" + count;
