@@ -31,8 +31,8 @@ namespace BingSearchApisQuickstart
             // Configure items in SubjectList to train models with different tags & search terms.
             List<Subject> subjectList = new List<Subject>
             {
-                new Subject{ subjectName = "Apples", subjectSearchTerm = "Granny Smith Apple"},
-                new Subject{ subjectName = "Oranges", subjectSearchTerm = "Naval Orange"}
+                new Subject{ subjectName = "Apple", subjectSearchTerm = "Red Apple"},
+                new Subject{ subjectName = "Pear", subjectSearchTerm = "Green Pear"}
             };
 
             // Number of images to search for
@@ -137,7 +137,7 @@ namespace BingSearchApisQuickstart
         static SearchResult BingImageSearch(string bingSubscriptionKey, string searchQuery, int count, int offset)
         {
             // Construct the URI of the search request
-            var uriQuery = bingUriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&offset=" + offset + "&count=" + count;
+            var uriQuery = bingUriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&offset=" + offset + "&count=" + count + "safeSearch=Moderate";
 
             // Perform the Web request and get the response
             WebRequest request = WebRequest.Create(uriQuery);
